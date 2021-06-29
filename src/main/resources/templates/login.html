@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Login Page</title>
+</head>
+<body>
+<div class="container row">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <h1>Login Form</h1>
+    <form th:action="@{/login}" th:object="${loginForm}" method="post">
+        <p th:if="${invalidCredentials}" class="error">Username or Password is wrong</p>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autofocus="autofocus"/>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password"/>
+        <br/>
+        <div class="g-recaptcha" data-sitekey="6LdmF9kaAAAAAH0tMIFWDEC_t1UGe9Lxovncdqgj"></div>
+        <input type="submit" value="Log in"/>
+    </form>
+</div>
+</body>
+</html>

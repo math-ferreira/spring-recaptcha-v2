@@ -12,8 +12,3 @@ fun main(args: Array<String>) {
 	runApplication<SpringRecaptchaApplication>(*args)
 }
 
-@Bean
-fun getRestTemplate(): RestTemplate {
-	return RestTemplate()
-}
-

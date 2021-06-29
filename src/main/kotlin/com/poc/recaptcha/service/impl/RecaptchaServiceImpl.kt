@@ -7,19 +7,21 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Service
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import org.springframework.web.client.RestTemplate
 
+@Service
 class RecaptchaServiceImpl(
     private val restTemplate: RestTemplate,
-    @Value("") private val secret: String,
-    @Value("") private val uri: String
+    @Value("\${google.recaptcha.secret}") private val secret: String,
+    @Value("\${google.recaptcha.verification.endpoint}") private val url: String
 ): RecaptchaService {
 
     override fun verifyRecaptcha(recaptchaResponse: String) {
         requestRestTemplate(recaptchaResponse)?.let {
-            if (it.success!!) throw RecaptchaErrorException(errors = it.errorCodes!!)
+            if (!it.success!!) throw RecaptchaErrorException(errors = it.errorCodes!!)
         }
     }
 
@@ -32,7 +34,7 @@ class RecaptchaServiceImpl(
         map.add("response", recaptchaResponse)
 
         val request = HttpEntity<MultiValueMap<String, String>>(map, httpHeaders)
-        val response = this.restTemplate.postForEntity(uri, request, RecaptchaDTO::class.java)
+        val response = this.restTemplate.postForEntity(url, request, RecaptchaDTO::class.java)
         return response.body
     }
 
